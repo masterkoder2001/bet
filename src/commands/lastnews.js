@@ -4,10 +4,10 @@ const logger = require('../utils/logger');
 
 module.exports = {
     name: 'lastnews',
-    description: 'Resend the latest news article',
+    description: 'Skicka senaste nyhetsartikeln igen',
     async execute(message) {
         try {
-            // Run Python script to get Finnhub news
+            // Kör Python-skript för att hämta Finnhub-nyheter
             const pythonProcess = spawn('python3', ['src/services/finnhub_news.py']);
             let newsData = '';
 
@@ -17,9 +17,9 @@ module.exports = {
 
             pythonProcess.stderr.on('data', (data) => {
                 const errorMsg = data.toString();
-                logger.error(`Python Error in lastnews command: ${errorMsg}`);
+                logger.error(`Python-fel i lastnews-kommando: ${errorMsg}`);
                 if (errorMsg.includes('API rate limit exceeded')) {
-                    message.reply('Rate limit reached. Please try again in a few minutes.');
+                    message.reply('Hastighetsgräns uppnådd. Vänligen försök igen om några minuter.');
                     return;
                 }
             });
@@ -27,7 +27,7 @@ module.exports = {
             await new Promise((resolve, reject) => {
                 pythonProcess.on('close', (code) => {
                     if (code !== 0) {
-                        reject(new Error(`Python process exited with code ${code}`));
+                        reject(new Error(`Python-processen avslutades med kod ${code}`));
                         return;
                     }
                     resolve();
@@ -38,25 +38,25 @@ module.exports = {
 
             if (articles.error) {
                 if (articles.error.includes('rate limit')) {
-                    await message.reply('Rate limit reached. Please try again in a few minutes.');
+                    await message.reply('Hastighetsgräns uppnådd. Vänligen försök igen om några minuter.');
                     return;
                 }
-                throw new Error(`Finnhub API Error: ${articles.error}`);
+                throw new Error(`Finnhub API-fel: ${articles.error}`);
             }
 
             if (articles.length === 0) {
-                await message.reply('No news articles found at the moment.');
+                await message.reply('Inga nyhetsartiklar hittades för tillfället.');
                 return;
             }
 
-            // Get the most recent article
+            // Hämta senaste artikeln
             const latestArticle = articles[0];
             const formattedMessage = formatNewsMessage(latestArticle);
             await message.reply(formattedMessage);
 
         } catch (error) {
-            logger.error('Error executing lastnews command:', error);
-            await message.reply('An error occurred while fetching the latest news.');
+            logger.error('Fel vid körning av lastnews-kommando:', error);
+            await message.reply('Ett fel uppstod vid hämtning av senaste nyheterna.');
         }
     }
 };

@@ -29,110 +29,96 @@ let newsService;
 let macroService;
 
 client.once('ready', () => {
-    logger.info(`Logged in as ${client.user.tag}`);
-    
-    // Initialize services
-    newsService = new NewsService(client);
-    macroService = new MacroService(client);
-    
-    // Start services
-    newsService.startNewsUpdates();
-    macroService.startMacroSchedule();
+    logger.info(`Bot är online! Inloggad som ${client.user.tag}`);
+    logger.info(`Ansluten till ${client.guilds.cache.size} servrar`);
+    logger.debug('Konfigurerade intents:', client.options.intents);
+
+    // Initialize and start services with enhanced error handling
+    try {
+        newsService = new NewsService(client);
+        macroService = new MacroService(client);
+
+        newsService.startNewsUpdates();
+        logger.info('Nyhetsservice startad framgångsrikt');
+
+        macroService.startMacroSchedule();
+        logger.info('Makroservice startad framgångsrikt');
+
+        // Verify channel access
+        const newsChannel = client.channels.cache.get(config.NEWS_CHANNEL_ID);
+        const macroChannel = client.channels.cache.get(config.MACRO_CHANNEL_ID);
+
+        if (!newsChannel || !macroChannel) {
+            throw new Error('Kunde inte hitta nyhets- eller makrokanalen. Kontrollera kanal-ID och bottens behörigheter.');
+        }
+
+        logger.info('Alla kanaler är tillgängliga och redo');
+    } catch (error) {
+        logger.error('Kritiskt fel vid initialisering av tjänster:', error);
+        process.exit(1);
+    }
 });
 
-// Command handling
+// Command handling with improved error logging
 client.on('messageCreate', async message => {
     if (!message.content.startsWith('!') || message.author.bot) return;
 
     const args = message.content.slice(1).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
 
-    if (!client.commands.has(commandName)) return;
+    if (!client.commands.has(commandName)) {
+        logger.debug(`Okänt kommando använt: ${commandName}`);
+        return;
+    }
+
+    const command = client.commands.get(commandName);
+    logger.info(`Kommando mottaget: ${commandName} från ${message.author.tag}`);
 
     try {
-        await client.commands.get(commandName).execute(message, args);
+        await command.execute(message, args);
+        logger.info(`Kommando ${commandName} utfört framgångsrikt`);
     } catch (error) {
-        logger.error('Error executing command:', error);
-        await message.reply('There was an error executing that command!');
+        logger.error(`Fel vid körning av kommando ${commandName}:`, error);
+        await message.reply('Ett fel uppstod när kommandot kördes. Vänligen försök igen.').catch(e => {
+            logger.error('Kunde inte skicka felmeddelande till användaren:', e);
+        });
     }
 });
 
-// Error handling
+// Enhanced error handling
 client.on('error', error => {
-    logger.error('Discord client error:', error);
+    logger.error('Discord-klient fel:', error);
 });
 
 process.on('unhandledRejection', error => {
-    logger.error('Unhandled promise rejection:', error);
+    logger.error('Ohanterad promise rejection:', error);
 });
 
-// Login to Discord with error handling
-// Print environment check
-console.log('Environment check:');
-console.log('DISCORD_TOKEN exists:', !!process.env.DISCORD_TOKEN);
-console.log('DISCORD_TOKEN length:', process.env.DISCORD_TOKEN?.length);
-console.log('NEWS_CHANNEL_ID exists:', !!process.env.NEWS_CHANNEL_ID);
-console.log('MACRO_CHANNEL_ID exists:', !!process.env.MACRO_CHANNEL_ID);
-console.log('FINNHUB_API_KEY exists:', !!process.env.FINNHUB_API_KEY);
+// Detailed connection logging
+const loginWithRetry = async (retryCount = 0, maxRetries = 3) => {
+    try {
+        await client.login(config.DISCORD_TOKEN);
+        logger.info('Ansluten till Discord framgångsrikt');
+    } catch (error) {
+        logger.error(`Anslutningsförsök ${retryCount + 1} misslyckades:`, error);
 
-client.login(config.DISCORD_TOKEN).then(() => {
-    logger.info('Successfully connected to Discord');
-    logger.info(`Bot user: ${client.user.tag}`);
-    logger.info(`Connected to ${client.guilds.cache.size} servers`);
-}).catch(error => {
-    logger.error('Failed to connect to Discord:', error);
-    // Check if token starts with "Bot "
-    if (!config.DISCORD_TOKEN.startsWith('Bot ')) {
-        logger.error('Token might be missing "Bot " prefix');
-    }
-    console.error('Detailed connection error:', {
-        errorName: error.name,
-        errorMessage: error.message,
-        tokenLength: config.DISCORD_TOKEN ? config.DISCORD_TOKEN.length : 0,
-        tokenExists: !!config.DISCORD_TOKEN,
-        isDefaultValue: config.DISCORD_TOKEN === 'your-discord-token'
-    });
-
-    if (!config.DISCORD_TOKEN) {
-        console.error('Error: No Discord token found');
-    } else if (config.DISCORD_TOKEN === 'your-discord-token') {
-        console.error('Error: Discord token is using default value from config.js');
-    } else if (config.DISCORD_TOKEN.length < 50) {
-        console.error('Error: Discord token appears to be invalid (too short)');
-    }
-
-    // Attempt to reconnect once before exiting
-    let retryCount = 0;
-    const maxRetries = 3;
-    const retryInterval = 5000;
-
-    const attemptReconnect = () => {
-        if (retryCount >= maxRetries) {
-            logger.error(`Failed to connect after ${maxRetries} attempts. Exiting.`);
+        if (retryCount < maxRetries) {
+            const retryDelay = 5000 * Math.pow(2, retryCount);
+            logger.info(`Försöker igen om ${retryDelay / 1000} sekunder...`);
+            setTimeout(() => loginWithRetry(retryCount + 1, maxRetries), retryDelay);
+        } else {
+            logger.error('Maximalt antal återanslutningsförsök uppnått. Avslutar.');
             process.exit(1);
         }
+    }
+};
 
-        retryCount++;
-        logger.info(`Attempting to reconnect... (Attempt ${retryCount}/${maxRetries})`);
-
-        client.login(config.DISCORD_TOKEN).catch(retryError => {
-            logger.error(`Reconnection attempt ${retryCount} failed:`, retryError.message);
-
-            if (retryCount < maxRetries) {
-                setTimeout(attemptReconnect, retryInterval);
-            } else {
-                logger.error('Max retry attempts reached. Exiting.');
-                process.exit(1);
-            }
-        });
-    };
-
-    setTimeout(attemptReconnect, retryInterval);
-});
+// Start connection process
+loginWithRetry();
 
 // Add rate limit handling
 client.on('rateLimit', (rateLimitInfo) => {
-    logger.warn('Rate limit hit:', {
+    logger.warn('Hastighetsgräns uppnådd:', {
         timeout: rateLimitInfo.timeout,
         limit: rateLimitInfo.limit,
         method: rateLimitInfo.method,

@@ -1,19 +1,19 @@
 module.exports = {
     name: 'test',
-    description: 'Test command to verify bot functionality',
+    description: 'Testkommando för att verifiera bottens funktionalitet',
     async execute(message) {
         try {
-            const statusMessage = `🤖 **Bot Status**
-✅ Bot Online
-✅ Connected to Discord
-✅ Macro Updates: Configured (Daily at 8 AM)
-✅ News Updates: Active (Every 5 minutes)
+            const statusMessage = `🤖 **Bottens Status**
+✅ Botten Online
+✅ Ansluten till Discord
+✅ Makrouppdateringar: Konfigurerad (Dagligen kl 08:00)
+✅ Nyhetsuppdateringar: Aktiv (Var 5:e minut)
 
-Commands are working! 🚀`;
+Kommandon fungerar! 🚀`;
 
             await message.reply(statusMessage);
         } catch (error) {
-            console.error('Error executing test command:', error);
+            console.error('Fel vid körning av testkommando:', error);
             await message.reply('Ett fel uppstod när testkommandot kördes. Vänligen försök igen.');
         }
     }

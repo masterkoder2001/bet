@@ -25,7 +25,7 @@ const formatEvents = (events) => {
 };
 
 const formatNewsMessage = (news) => {
-    return `📰 **Breaking News**
+    return `📰 **Senaste Nytt**
 📢 **${news.title}**
 
 📈 *${news.description}*

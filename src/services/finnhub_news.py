@@ -4,60 +4,74 @@ import json
 import logging
 from datetime import datetime, timedelta
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Konfigurera detaljerad loggning
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 def get_finnhub_news():
     try:
         api_key = os.environ.get('FINNHUB_API_KEY')
         if not api_key:
-            logger.error('Finnhub API key not found in environment variables')
-            return json.dumps({'error': 'Finnhub API key not found in environment variables'})
+            error_msg = 'Finnhub API-nyckel saknas i miljövariablerna'
+            logger.error(error_msg)
+            return json.dumps({'error': error_msg})
 
-        logger.info('Initializing Finnhub client')
+        logger.info('Initierar Finnhub-klienten')
         finnhub_client = finnhub.Client(api_key=api_key)
 
-        # Get news for the last 24 hours
         end_time = datetime.now()
         start_time = end_time - timedelta(hours=24)
-        logger.info(f'Fetching news from {start_time.isoformat()} to {end_time.isoformat()}')
+        logger.info(f'Hämtar nyheter från {start_time.isoformat()} till {end_time.isoformat()}')
 
         try:
-            # Get market news - using only category parameter
-            logger.info('Making API request to Finnhub')
+            logger.debug('Försöker hämta nyheter från Finnhub API')
             news = finnhub_client.general_news('general')
-            logger.info(f'Received {len(news)} articles from Finnhub')
-        except Exception as api_error:
-            logger.error(f'Finnhub API error: {str(api_error)}')
-            if 'API rate limit' in str(api_error):
-                return json.dumps({'error': 'API rate limit exceeded'})
-            raise
+            logger.info(f'Mottog {len(news)} artiklar från Finnhub')
 
-        # Format and filter news for the Discord bot
+            if not news:
+                logger.warning('Inga nyheter returnerades från API:et')
+                return json.dumps([])
+
+        except Exception as api_error:
+            error_msg = str(api_error)
+            logger.error(f'Finnhub API-fel: {error_msg}')
+            if 'API rate limit' in error_msg:
+                return json.dumps({'error': 'API hastighetsgräns överskriden'})
+            return json.dumps({'error': f'API-anropsfel: {error_msg}'})
+
         formatted_news = []
         for article in news:
-            article_timestamp = article['datetime']
-            if (article.get('headline') and 
-                article.get('summary') and 
-                start_time.timestamp() <= article_timestamp <= end_time.timestamp()):
-                formatted_article = {
-                    'title': article['headline'],
-                    'description': article['summary'],
-                    'url': article['url'],
-                    'source': {'name': article.get('source', 'Finnhub')},
-                    'publishedAt': datetime.fromtimestamp(article['datetime']).isoformat()
-                }
-                formatted_news.append(formatted_article)
+            try:
+                article_timestamp = article['datetime']
+                if (article.get('headline') and 
+                    article.get('summary') and 
+                    start_time.timestamp() <= article_timestamp <= end_time.timestamp()):
 
-        logger.info(f'Processed and formatted {len(formatted_news)} articles')
+                    formatted_article = {
+                        'title': article['headline'],
+                        'description': article['summary'],
+                        'url': article.get('url', ''),
+                        'source': {'name': article.get('source', 'Finnhub')},
+                        'publishedAt': datetime.fromtimestamp(article_timestamp).isoformat()
+                    }
+                    formatted_news.append(formatted_article)
+                    logger.debug(f'Artikel formaterad: {article["headline"]}')
+            except KeyError as ke:
+                logger.warning(f'Saknade fält i artikel: {ke}')
+                continue
+
+        logger.info(f'Bearbetade och formaterade {len(formatted_news)} artiklar')
         return json.dumps(formatted_news)
     except Exception as e:
-        logger.error(f'Error in get_finnhub_news: {str(e)}')
-        return json.dumps({'error': str(e)})
+        error_msg = f'Oväntat fel i get_finnhub_news: {str(e)}'
+        logger.error(error_msg)
+        return json.dumps({'error': error_msg})
 
 if __name__ == '__main__':
-    logger.info('Starting Finnhub news fetch')
+    logger.info('Startar Finnhub nyhetshämtning')
     result = get_finnhub_news()
     print(result)
-    logger.info('Finished Finnhub news fetch')
+    logger.info('Avslutade Finnhub nyhetshämtning')

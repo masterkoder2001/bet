@@ -9,12 +9,12 @@ class MacroService {
     }
 
     startMacroSchedule() {
-        logger.info('Starting macro schedule service');
+        logger.info('Startar makroschematjänsten');
         cron.schedule(config.MACRO_SCHEDULE, () => this.sendMacroUpdate(), {
             timezone: "Europe/Stockholm"
         });
 
-        // Send initial update for testing
+        // Skicka initial uppdatering för testning
         this.sendMacroUpdate();
     }
 
@@ -22,10 +22,10 @@ class MacroService {
         try {
             const macroChannel = this.client.channels.cache.get(config.MACRO_CHANNEL_ID);
             if (!macroChannel) {
-                throw new Error('Macro channel not found');
+                throw new Error('Makrokanal hittades inte');
             }
 
-            // This would typically come from an API or database
+            // Detta skulle normalt komma från en API eller databas
             const macroData = {
                 usa: [
                     {
@@ -67,9 +67,9 @@ class MacroService {
 
             const formattedMessage = formatMacroMessage(macroData);
             await macroChannel.send(formattedMessage);
-            logger.info('Sent macro update successfully');
+            logger.info('Skickade makrouppdatering');
         } catch (error) {
-            logger.error('Error sending macro update:', error);
+            logger.error('Fel vid skickande av makrouppdatering:', error);
         }
     }
 }
