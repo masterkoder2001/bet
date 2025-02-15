@@ -115,6 +115,7 @@ process.on('unhandledRejection', error => {
 const loginWithRetry = async (retryCount = 0, maxRetries = 3) => {
     try {
         logger.info('Attempting to connect to Discord...');
+        logger.debug('Token length:', config.DISCORD_TOKEN ? config.DISCORD_TOKEN.length : 0);
         await client.login(config.DISCORD_TOKEN);
         logger.info('Ansluten till Discord framgångsrikt');
     } catch (error) {
