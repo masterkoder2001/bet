@@ -66,5 +66,8 @@ process.on('unhandledRejection', error => {
     logger.error('Unhandled promise rejection:', error);
 });
 
-// Login to Discord
-client.login(config.DISCORD_TOKEN);
+// Login to Discord with error handling
+client.login(config.DISCORD_TOKEN).catch(error => {
+    logger.error('Failed to connect to Discord:', error);
+    console.error('Connection error:', error.message);
+});
