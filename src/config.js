@@ -6,7 +6,7 @@ module.exports = {
 
     // Finnhub Configuration
     FINNHUB_API_KEY: process.env.FINNHUB_API_KEY || 'your-finnhub-key',
-    NEWS_UPDATE_INTERVAL: 1 * 60 * 1000, // 1 minute for testing
+    NEWS_UPDATE_INTERVAL: 10 * 1000, // 10 seconds for near-instant updates
 
     // Logging Configuration
     LOG_LEVEL: 'info',
