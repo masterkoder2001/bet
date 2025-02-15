@@ -7,7 +7,7 @@ class NewsService {
     constructor(client) {
         this.client = client;
         this.lastNewsTimestamp = new Date();
-        this.lastNewsTimestamp.setHours(this.lastNewsTimestamp.getHours() - 1);
+        this.lastNewsTimestamp.setHours(this.lastNewsTimestamp.getHours() - 24);
         this.sentArticles = new Set(); // Track sent article IDs
     }
 

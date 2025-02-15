@@ -8,9 +8,9 @@ def get_finnhub_news():
         # Initialize Finnhub client
         finnhub_client = finnhub.Client(api_key=os.environ.get('FINNHUB_API_KEY'))
 
-        # Get news for the last hour
+        # Get news for the last 24 hours
         end_time = datetime.now()
-        start_time = end_time - timedelta(hours=1)
+        start_time = end_time - timedelta(hours=24)
 
         # Get market news - using only category parameter
         news = finnhub_client.general_news('general')
