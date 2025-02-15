@@ -79,6 +79,12 @@ client.login(config.DISCORD_TOKEN).catch(error => {
     console.error('Detailed connection error:', {
         errorName: error.name,
         errorMessage: error.message,
-        token: config.DISCORD_TOKEN ? 'Token exists' : 'No token found'
+        token: config.DISCORD_TOKEN ? `Token length: ${config.DISCORD_TOKEN.length}` : 'No token found',
+        tokenFirstChar: config.DISCORD_TOKEN ? config.DISCORD_TOKEN[0] : 'N/A'
     });
+    
+    // Additional validation
+    if (!config.DISCORD_TOKEN.startsWith('MTA') && !config.DISCORD_TOKEN.startsWith('MTk')) {
+        console.error('Error: Invalid Discord token format. Token should start with MTA or MTk');
+    }
 });
