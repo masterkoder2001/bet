@@ -22,15 +22,11 @@ service:
   build:
     builder: heroku/buildpacks:20
     buildCommand: |
-      # Set Python version using the new recommended approach
+      # Set Python version using the recommended approach
       echo "3.11.11" > .python-version
 
-      # Create requirements.txt with correct package version syntax
-      cat > requirements.txt << 'EOF'
-finnhub-python==2.4.18
-trafilatura==2.0.0
-twilio==9.4.5
-EOF
+      # Generate requirements.txt with correct package versions
+      python3 src/utils/generate_requirements.py
 
       # Install Node.js dependencies
       npm install
