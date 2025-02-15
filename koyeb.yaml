@@ -17,14 +17,15 @@ service:
     - port: 3000
       http: true
   buildpacks:
-    - name: heroku/python
     - name: heroku/nodejs
+    - name: heroku/python
   build:
     builder: heroku/buildpacks:20
     buildCommand: |
-      # Create requirements.txt
-      echo "finnhub-python==2.4.18" > requirements.txt
-
-      # Install Node.js dependencies
+      cat > requirements.txt << 'EOL'
+finnhub-python==2.4.18
+trafilatura==2.0.0
+twilio==9.4.5
+EOL
       npm install
   start: node src/index.js
