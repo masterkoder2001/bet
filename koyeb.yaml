@@ -1,0 +1,24 @@
+name: bet
+service:
+  name: discord-bot
+  type: web
+  env:
+    - name: DISCORD_TOKEN
+      value: $DISCORD_TOKEN
+    - name: NEWS_CHANNEL_ID
+      value: $NEWS_CHANNEL_ID
+    - name: MACRO_CHANNEL_ID
+      value: $MACRO_CHANNEL_ID
+    - name: FINNHUB_API_KEY
+      value: $FINNHUB_API_KEY
+    - name: LOG_LEVEL
+      value: "info"
+  ports:
+    - port: 3000
+      http: true
+  build:
+    builder: nixpacks
+    buildCommand: |
+      npm install
+      pip install finnhub-python
+  start: node src/index.js
