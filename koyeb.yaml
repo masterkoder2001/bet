@@ -17,10 +17,15 @@ service:
     - port: 3000
       http: true
   buildpacks:
+    - name: heroku/python
     - name: heroku/nodejs
   build:
     builder: heroku/buildpacks:20
     buildCommand: |
+      # Install Python dependencies
+      python -m pip install --upgrade pip
       pip install finnhub-python
+
+      # Install Node.js dependencies
       npm install
   start: node src/index.js
