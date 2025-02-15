@@ -1,6 +1,14 @@
+const validateToken = (token) => {
+    if (!token || token === 'your-discord-token') {
+        console.error('Invalid Discord token configuration');
+        process.exit(1);
+    }
+    return token;
+};
+
 module.exports = {
     // Discord Configuration
-    DISCORD_TOKEN: process.env.DISCORD_TOKEN || 'your-discord-token',
+    DISCORD_TOKEN: validateToken(process.env.DISCORD_TOKEN),
     NEWS_CHANNEL_ID: process.env.NEWS_CHANNEL_ID || 'your-news-channel-id',
     MACRO_CHANNEL_ID: process.env.MACRO_CHANNEL_ID || 'your-macro-channel-id',
 

@@ -70,6 +70,7 @@ process.on('unhandledRejection', error => {
 // Print environment check
 console.log('Environment check:');
 console.log('DISCORD_TOKEN exists:', !!process.env.DISCORD_TOKEN);
+console.log('DISCORD_TOKEN length:', process.env.DISCORD_TOKEN?.length);
 console.log('NEWS_CHANNEL_ID exists:', !!process.env.NEWS_CHANNEL_ID);
 console.log('MACRO_CHANNEL_ID exists:', !!process.env.MACRO_CHANNEL_ID);
 console.log('FINNHUB_API_KEY exists:', !!process.env.FINNHUB_API_KEY);
