@@ -17,11 +17,12 @@ service:
     - port: 3000
       http: true
   buildpacks:
-    - name: python
-    - name: nodejs
+    - name: heroku/python
+    - name: heroku/nodejs
   build:
-    builder: nixpacks
+    builder: heroku/buildpacks:20
     buildCommand: |
-      npm install
+      python3 src/utils/generate_requirements.py
       pip install -r requirements.txt
+      npm install
   start: node src/index.js
