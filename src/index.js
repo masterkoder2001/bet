@@ -6,6 +6,14 @@ const MacroService = require('./services/macroService');
 const fs = require('fs');
 const path = require('path');
 
+logger.info('Starting Discord bot...');
+logger.info('Environment check:', {
+    discord_token_exists: !!process.env.DISCORD_TOKEN,
+    news_channel_exists: !!process.env.NEWS_CHANNEL_ID,
+    macro_channel_exists: !!process.env.MACRO_CHANNEL_ID,
+    finnhub_key_exists: !!process.env.FINNHUB_API_KEY
+});
+
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -17,11 +25,18 @@ const client = new Client({
 // Command handling setup
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
+
+logger.info('Loading commands from:', commandsPath);
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-    const command = require(path.join(commandsPath, file));
-    client.commands.set(command.name, command);
+    try {
+        const command = require(path.join(commandsPath, file));
+        client.commands.set(command.name, command);
+        logger.info(`Loaded command: ${command.name}`);
+    } catch (error) {
+        logger.error(`Failed to load command from ${file}:`, error);
+    }
 }
 
 // Services initialization
@@ -38,7 +53,9 @@ client.once('ready', () => {
         newsService = new NewsService(client);
         macroService = new MacroService(client);
 
-        newsService.startNewsUpdates();
+        newsService.startNewsUpdates().catch(error => {
+            logger.error('Failed to start news service:', error);
+        });
         logger.info('Nyhetsservice startad framgångsrikt');
 
         macroService.startMacroSchedule();
@@ -97,6 +114,7 @@ process.on('unhandledRejection', error => {
 // Detailed connection logging
 const loginWithRetry = async (retryCount = 0, maxRetries = 3) => {
     try {
+        logger.info('Attempting to connect to Discord...');
         await client.login(config.DISCORD_TOKEN);
         logger.info('Ansluten till Discord framgångsrikt');
     } catch (error) {
