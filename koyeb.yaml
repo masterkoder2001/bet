@@ -25,10 +25,6 @@ service:
       # Create requirements.txt
       echo "finnhub-python==2.4.18" > requirements.txt
 
-      # Install Python dependencies
-      python -m pip install --upgrade pip
-      pip install -r requirements.txt
-
       # Install Node.js dependencies
       npm install
   start: node src/index.js
