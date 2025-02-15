@@ -16,9 +16,12 @@ service:
   ports:
     - port: 3000
       http: true
+  buildpacks:
+    - name: python
+    - name: nodejs
   build:
     builder: nixpacks
     buildCommand: |
       npm install
-      pip install finnhub-python
+      pip install -r requirements.txt
   start: node src/index.js
