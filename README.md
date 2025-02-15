@@ -20,26 +20,13 @@ NEWS_CHANNEL_ID=your-news-channel-id
 MACRO_CHANNEL_ID=your-macro-channel-id
 ```
 
+## Deploy to Koyeb | Distribuera till Koyeb
+
+Click the button below to deploy the bot to Koyeb:
+
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=bet&repository=masterkoder2001%2Fbet&branch=main&instance_type=free)
+
 ## Start the Bot | Starta Boten
 
 ```bash
 node src/index.js
-```
-
-## Commands | Kommandon
-
-- `!test` - Check bot status | Kontrollera botens status
-- `!lastnews` - Show latest news article | Visa senaste nyhetsartikeln
-
-## Configuration | Konfiguration
-
-- News updates every 5 minutes | Nyhetsuppdateringar var 5:e minut
-- Macro updates daily at 08:00 | Makrouppdateringar dagligen kl 08:00
-- All times in Europe/Stockholm timezone | Alla tidsangivelser är i Europa/Stockholm-tidszonen
-
-## Logging | Loggning
-
-Logs are saved in | Loggar sparas i:
-- error.log - For errors | För fel
-- combined.log - For all events | För alla händelser
-- finnhub.log - For Finnhub API related events | För Finnhub API-relaterade händelser
