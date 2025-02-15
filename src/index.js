@@ -67,7 +67,18 @@ process.on('unhandledRejection', error => {
 });
 
 // Login to Discord with error handling
+// Print environment check
+console.log('Environment check:');
+console.log('DISCORD_TOKEN exists:', !!process.env.DISCORD_TOKEN);
+console.log('NEWS_CHANNEL_ID exists:', !!process.env.NEWS_CHANNEL_ID);
+console.log('MACRO_CHANNEL_ID exists:', !!process.env.MACRO_CHANNEL_ID);
+console.log('FINNHUB_API_KEY exists:', !!process.env.FINNHUB_API_KEY);
+
 client.login(config.DISCORD_TOKEN).catch(error => {
     logger.error('Failed to connect to Discord:', error);
-    console.error('Connection error:', error.message);
+    console.error('Detailed connection error:', {
+        errorName: error.name,
+        errorMessage: error.message,
+        token: config.DISCORD_TOKEN ? 'Token exists' : 'No token found'
+    });
 });

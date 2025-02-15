@@ -14,6 +14,10 @@ class NewsService {
     async startNewsUpdates() {
         try {
             logger.info('Starting news update service');
+            console.log('News service config:', {
+                interval: config.NEWS_UPDATE_INTERVAL,
+                channelId: config.NEWS_CHANNEL_ID
+            });
             await this.fetchAndSendNews(); // Initial fetch
             setInterval(() => this.fetchAndSendNews(), config.NEWS_UPDATE_INTERVAL);
         } catch (error) {
