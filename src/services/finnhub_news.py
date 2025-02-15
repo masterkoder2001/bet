@@ -1,3 +1,4 @@
+
 import finnhub
 import os
 import json
@@ -16,8 +17,8 @@ def get_finnhub_news():
         start_timestamp = int(start_time.timestamp())
         end_timestamp = int(end_time.timestamp())
         
-        # Get market news
-        news = finnhub_client.market_news('general', _from=start_timestamp, to=end_timestamp)
+        # Get market news using the correct method name
+        news = finnhub_client.general_news('general', _from=start_timestamp, to=end_timestamp)
         
         # Format news for the Discord bot
         formatted_news = []
