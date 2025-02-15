@@ -92,7 +92,7 @@ client.login(config.DISCORD_TOKEN).then(() => {
         tokenExists: !!config.DISCORD_TOKEN,
         isDefaultValue: config.DISCORD_TOKEN === 'your-discord-token'
     });
-    
+
     if (!config.DISCORD_TOKEN) {
         console.error('Error: No Discord token found');
     } else if (config.DISCORD_TOKEN === 'your-discord-token') {
@@ -101,12 +101,42 @@ client.login(config.DISCORD_TOKEN).then(() => {
         console.error('Error: Discord token appears to be invalid (too short)');
     }
 
-    // Försök starta om en gång innan vi avslutar
-    setTimeout(() => {
-        console.log('Attempting to reconnect...');
-        client.login(config.DISCORD_TOKEN).catch(retryError => {
-            console.error('Reconnection failed:', retryError.message);
+    // Attempt to reconnect once before exiting
+    let retryCount = 0;
+    const maxRetries = 3;
+    const retryInterval = 5000;
+
+    const attemptReconnect = () => {
+        if (retryCount >= maxRetries) {
+            logger.error(`Failed to connect after ${maxRetries} attempts. Exiting.`);
             process.exit(1);
+        }
+
+        retryCount++;
+        logger.info(`Attempting to reconnect... (Attempt ${retryCount}/${maxRetries})`);
+
+        client.login(config.DISCORD_TOKEN).catch(retryError => {
+            logger.error(`Reconnection attempt ${retryCount} failed:`, retryError.message);
+
+            if (retryCount < maxRetries) {
+                setTimeout(attemptReconnect, retryInterval);
+            } else {
+                logger.error('Max retry attempts reached. Exiting.');
+                process.exit(1);
+            }
         });
-    }, 5000);
+    };
+
+    setTimeout(attemptReconnect, retryInterval);
+});
+
+// Add rate limit handling
+client.on('rateLimit', (rateLimitInfo) => {
+    logger.warn('Rate limit hit:', {
+        timeout: rateLimitInfo.timeout,
+        limit: rateLimitInfo.limit,
+        method: rateLimitInfo.method,
+        path: rateLimitInfo.path,
+        route: rateLimitInfo.route
+    });
 });

@@ -1,4 +1,3 @@
-
 const { spawn } = require('child_process');
 const { formatNewsMessage } = require('../utils/formatters');
 const logger = require('../utils/logger');
@@ -16,6 +15,15 @@ module.exports = {
                 newsData += data.toString();
             });
 
+            pythonProcess.stderr.on('data', (data) => {
+                const errorMsg = data.toString();
+                logger.error(`Python Error in lastnews command: ${errorMsg}`);
+                if (errorMsg.includes('API rate limit exceeded')) {
+                    message.reply('Rate limit reached. Please try again in a few minutes.');
+                    return;
+                }
+            });
+
             await new Promise((resolve, reject) => {
                 pythonProcess.on('close', (code) => {
                     if (code !== 0) {
@@ -27,13 +35,17 @@ module.exports = {
             });
 
             const articles = JSON.parse(newsData);
-            
+
             if (articles.error) {
+                if (articles.error.includes('rate limit')) {
+                    await message.reply('Rate limit reached. Please try again in a few minutes.');
+                    return;
+                }
                 throw new Error(`Finnhub API Error: ${articles.error}`);
             }
 
             if (articles.length === 0) {
-                await message.reply('Inga nyheter hittades för tillfället.');
+                await message.reply('No news articles found at the moment.');
                 return;
             }
 
@@ -41,10 +53,10 @@ module.exports = {
             const latestArticle = articles[0];
             const formattedMessage = formatNewsMessage(latestArticle);
             await message.reply(formattedMessage);
-            
+
         } catch (error) {
             logger.error('Error executing lastnews command:', error);
-            await message.reply('Ett fel uppstod när senaste nyheten skulle hämtas.');
+            await message.reply('An error occurred while fetching the latest news.');
         }
     }
 };
