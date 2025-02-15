@@ -22,10 +22,12 @@ service:
   build:
     builder: heroku/buildpacks:20
     buildCommand: |
-      cat > requirements.txt << 'EOL'
-finnhub-python==2.4.18
-trafilatura==2.0.0
-twilio==9.4.5
-EOL
+      # Set Python version
+      echo "python-3.11.7" > runtime.txt
+
+      # Create requirements.txt with one package per line
+      printf "finnhub-python==2.4.18\ntrafilatura==2.0.0\ntwilio==9.4.5\n" > requirements.txt
+
+      # Install Node.js dependencies
       npm install
   start: node src/index.js
