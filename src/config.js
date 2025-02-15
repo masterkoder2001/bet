@@ -15,7 +15,19 @@ const validateChannelId = (id, name) => {
         console.error(`Invalid ${name} channel ID configuration`);
         process.exit(1);
     }
+    if (!/^\d+$/.test(id)) {
+        console.error(`${name} channel ID must contain only numbers`);
+        process.exit(1);
+    }
     return id;
+};
+
+const validateApiKey = (key, name) => {
+    if (!key || key === `your-${name}-key`) {
+        console.error(`Invalid ${name} API key configuration`);
+        process.exit(1);
+    }
+    return key;
 };
 
 module.exports = {
@@ -25,11 +37,11 @@ module.exports = {
     MACRO_CHANNEL_ID: validateChannelId(process.env.MACRO_CHANNEL_ID, 'macro'),
 
     // Finnhub Configuration
-    FINNHUB_API_KEY: process.env.FINNHUB_API_KEY || 'your-finnhub-key',
-    NEWS_UPDATE_INTERVAL: 10 * 1000, // 10 seconds for near-instant updates
+    FINNHUB_API_KEY: validateApiKey(process.env.FINNHUB_API_KEY, 'finnhub'),
+    NEWS_UPDATE_INTERVAL: 300000, // 5 minutes in milliseconds
 
     // Logging Configuration
-    LOG_LEVEL: 'debug', // Ändrat till debug för mer detaljerad loggning
+    LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
 
     // Macro Schedule
     MACRO_SCHEDULE: '0 8 * * *', // Every day at 8 AM

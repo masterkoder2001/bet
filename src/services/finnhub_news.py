@@ -2,14 +2,14 @@ import finnhub
 import os
 import json
 import logging
+import sys
 from datetime import datetime, timedelta
 
-# Konfigurera detaljerad loggning
+# Configure logging to write to file only, keep stderr for actual errors
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.StreamHandler(),
         logging.FileHandler('finnhub.log')
     ]
 )
@@ -21,7 +21,8 @@ def get_finnhub_news():
         if not api_key:
             error_msg = 'Finnhub API-nyckel saknas i miljövariablerna'
             logger.error(error_msg)
-            return json.dumps({'error': error_msg})
+            print(json.dumps({'error': error_msg}), file=sys.stderr)
+            return
 
         logger.info('Initierar Finnhub-klienten')
         try:
@@ -29,7 +30,8 @@ def get_finnhub_news():
         except Exception as e:
             error_msg = f'Kunde inte initiera Finnhub-klienten: {str(e)}'
             logger.error(error_msg)
-            return json.dumps({'error': error_msg})
+            print(json.dumps({'error': error_msg}), file=sys.stderr)
+            return
 
         end_time = datetime.now()
         start_time = end_time - timedelta(hours=24)
@@ -42,18 +44,22 @@ def get_finnhub_news():
 
             if not news:
                 logger.warning('Inga nyheter returnerades från API:et')
-                return json.dumps([])
+                print(json.dumps([]))
+                return
 
         except finnhub.FinnhubAPIException as api_error:
             error_msg = str(api_error)
             logger.error(f'Finnhub API-fel: {error_msg}')
             if 'API rate limit' in error_msg:
-                return json.dumps({'error': 'API hastighetsgräns överskriden'})
-            return json.dumps({'error': f'API-anropsfel: {error_msg}'})
+                print(json.dumps({'error': 'API hastighetsgräns överskriden'}), file=sys.stderr)
+            else:
+                print(json.dumps({'error': f'API-anropsfel: {error_msg}'}), file=sys.stderr)
+            return
         except Exception as e:
             error_msg = f'Oväntat fel vid hämtning av nyheter: {str(e)}'
             logger.error(error_msg)
-            return json.dumps({'error': error_msg})
+            print(json.dumps({'error': error_msg}), file=sys.stderr)
+            return
 
         formatted_news = []
         for article in news:
@@ -81,14 +87,15 @@ def get_finnhub_news():
                 continue
 
         logger.info(f'Bearbetade och formaterade {len(formatted_news)} artiklar')
-        return json.dumps(formatted_news)
+        # Only output the JSON data to stdout
+        print(json.dumps(formatted_news))
+
     except Exception as e:
         error_msg = f'Oväntat fel i get_finnhub_news: {str(e)}'
         logger.error(error_msg)
-        return json.dumps({'error': error_msg})
+        print(json.dumps({'error': error_msg}), file=sys.stderr)
 
 if __name__ == '__main__':
     logger.info('Startar Finnhub nyhetshämtning')
-    result = get_finnhub_news()
-    print(result)
+    get_finnhub_news()
     logger.info('Avslutade Finnhub nyhetshämtning')

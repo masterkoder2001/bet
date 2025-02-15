@@ -48,18 +48,22 @@ client.once('ready', () => {
     logger.info(`Ansluten till ${client.guilds.cache.size} servrar`);
     logger.debug('Konfigurerade intents:', client.options.intents);
 
-    // Initialize and start services with enhanced error handling
     try {
         newsService = new NewsService(client);
         macroService = new MacroService(client);
 
-        newsService.startNewsUpdates().catch(error => {
-            logger.error('Failed to start news service:', error);
+        Promise.all([
+            newsService.startNewsUpdates().catch(error => {
+                logger.error('Failed to start news service:', error);
+                throw error;
+            }),
+            macroService.startMacroSchedule()
+        ]).then(() => {
+            logger.info('Alla tjänster startade framgångsrikt');
+        }).catch(error => {
+            logger.error('Ett kritiskt fel uppstod vid start av tjänsterna:', error);
+            process.exit(1);
         });
-        logger.info('Nyhetsservice startad framgångsrikt');
-
-        macroService.startMacroSchedule();
-        logger.info('Makroservice startad framgångsrikt');
 
         // Verify channel access
         const newsChannel = client.channels.cache.get(config.NEWS_CHANNEL_ID);
