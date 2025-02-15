@@ -74,7 +74,9 @@ console.log('NEWS_CHANNEL_ID exists:', !!process.env.NEWS_CHANNEL_ID);
 console.log('MACRO_CHANNEL_ID exists:', !!process.env.MACRO_CHANNEL_ID);
 console.log('FINNHUB_API_KEY exists:', !!process.env.FINNHUB_API_KEY);
 
-client.login(config.DISCORD_TOKEN).catch(error => {
+client.login(config.DISCORD_TOKEN).then(() => {
+    logger.info('Successfully connected to Discord');
+}).catch(error => {
     logger.error('Failed to connect to Discord:', error);
     console.error('Detailed connection error:', {
         errorName: error.name,
@@ -83,8 +85,10 @@ client.login(config.DISCORD_TOKEN).catch(error => {
         tokenFirstChar: config.DISCORD_TOKEN ? config.DISCORD_TOKEN[0] : 'N/A'
     });
     
-    // Additional validation
-    if (!config.DISCORD_TOKEN.startsWith('MTA') && !config.DISCORD_TOKEN.startsWith('MTk')) {
+    if (!config.DISCORD_TOKEN || config.DISCORD_TOKEN === 'your-discord-token') {
+        console.error('Error: Discord token is using default value from config.js');
+    } else if (!config.DISCORD_TOKEN.startsWith('MTA') && !config.DISCORD_TOKEN.startsWith('MTk')) {
         console.error('Error: Invalid Discord token format. Token should start with MTA or MTk');
     }
+    process.exit(1); // Exit on connection failure
 });
