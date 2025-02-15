@@ -38,7 +38,11 @@ class NewsService {
             });
 
             pythonProcess.stderr.on('data', (data) => {
-                logger.error(`Python Error: ${data}`);
+                const errorMsg = data.toString();
+                logger.error(`Python Error: ${errorMsg}`);
+                if (errorMsg.includes('ModuleNotFoundError')) {
+                    logger.error('Missing Python dependencies. Please run: pip install finnhub-python');
+                }
             });
 
             await new Promise((resolve, reject) => {

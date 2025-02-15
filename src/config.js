@@ -3,6 +3,10 @@ const validateToken = (token) => {
         console.error('Invalid Discord token configuration');
         process.exit(1);
     }
+    if (!/^[A-Za-z0-9._-]+$/.test(token)) {
+        console.error('Discord token contains invalid characters');
+        process.exit(1);
+    }
     return token;
 };
 
