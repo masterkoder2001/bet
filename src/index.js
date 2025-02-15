@@ -77,8 +77,14 @@ console.log('FINNHUB_API_KEY exists:', !!process.env.FINNHUB_API_KEY);
 
 client.login(config.DISCORD_TOKEN).then(() => {
     logger.info('Successfully connected to Discord');
+    logger.info(`Bot user: ${client.user.tag}`);
+    logger.info(`Connected to ${client.guilds.cache.size} servers`);
 }).catch(error => {
     logger.error('Failed to connect to Discord:', error);
+    // Check if token starts with "Bot "
+    if (!config.DISCORD_TOKEN.startsWith('Bot ')) {
+        logger.error('Token might be missing "Bot " prefix');
+    }
     console.error('Detailed connection error:', {
         errorName: error.name,
         errorMessage: error.message,

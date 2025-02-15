@@ -12,7 +12,7 @@ const validateToken = (token) => {
 
 module.exports = {
     // Discord Configuration
-    DISCORD_TOKEN: validateToken(process.env.DISCORD_TOKEN),
+    DISCORD_TOKEN: `Bot ${validateToken(process.env.DISCORD_TOKEN)}`,
     NEWS_CHANNEL_ID: process.env.NEWS_CHANNEL_ID || 'your-news-channel-id',
     MACRO_CHANNEL_ID: process.env.MACRO_CHANNEL_ID || 'your-macro-channel-id',
 
