@@ -1,0 +1,66 @@
+skip: heroku/nodejs-corepack@3.4.5
+skip: heroku/nodejs-npm-engine@3.4.5
+fail: heroku/nodejs-npm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: koyeb/build-command-nodejs@0.1.0
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/nodejs-engine@3.4.5
+fail: heroku/nodejs-corepack@3.4.5
+fail: heroku/nodejs-pnpm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/nodejs-engine@3.4.5
+fail: heroku/nodejs-pnpm-engine@3.4.5
+fail: heroku/nodejs-pnpm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/nodejs-corepack@3.4.5
+fail: heroku/nodejs-yarn@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/nodejs-corepack@3.4.5
+skip: heroku/nodejs-npm-engine@3.4.5
+fail: heroku/nodejs-npm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/procfile@4.0.0
+Resolving plan... (try #1)
+fail: heroku/nodejs-engine@3.4.5 provides unused node
+Resolving plan... (try #2)
+fail: heroku/nodejs-engine@3.4.5 provides unused node
+======== Results ========
+pass: heroku/jvm@6.0.4
+fail: heroku/maven@6.0.4
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+pass: heroku/jvm@6.0.4
+fail: heroku/maven@6.0.4
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/jvm@6.0.4
+fail: heroku/gradle@6.0.4
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+pass: heroku/jvm@6.0.4
+fail: heroku/gradle@6.0.4
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: heroku/clojure@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/clojure@0.0.0
+skip: heroku/procfile@4.0.0
+Timer: Detector ran for 810.040222ms and ended at 2025-02-15T12:28:43Z
+ERROR: No buildpack groups passed detection.
+ERROR: Please check that you are running against the correct path.
+ERROR: failed to detect: no buildpacks participating
+Build failed ❌

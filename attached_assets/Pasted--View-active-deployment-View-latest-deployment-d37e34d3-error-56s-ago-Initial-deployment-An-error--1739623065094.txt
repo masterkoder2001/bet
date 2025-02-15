@@ -1,0 +1,203 @@
+
+
+View active deployment
+View latest deployment
+d37e34d3
+
+error
+56s ago
+Initial deployment
+An error occurred while building your application
+Why it happened?
+Different reasons can result in a build failure. The most common ones are:
+
+The language or package manager used by your application is not supported
+Your application is missing required dependencies
+An invalid configuration results in an error during the build process
+How to solve the problem?
+First, make sure that your application builds properly on your machine. Build logs also provide useful information to help you identify and resolve the root cause. Read our troubleshooting documentation to view and resolve common errors.
+
+Check the build logs for more details.
+
+Overview
+Web service
+Public URL
+monthly-rayna-botdc-83ab5758.koyeb.app/
+(forwarded to port 8000)
+
+Repository
+masterkoder2001/mmmm
+Branch
+main
+Commit
+40f32ef0
+Builder type
+Buildpack
+Auto deploy
+True
+Privileged
+False
+Instance type
+Free
+Scaling
+1 instance
+Regions
+Frankfurt
+Environment
+0 variables
+Volumes
+0 volumes attached
+View more
+Build
+failed
+Clone repository
+Repository cloned
+1s
+Start Docker
+Docker daemon started successfully
+3s
+Analyze
+Files analysis completed successfully
+5s
+Detect runtime
+The application type could not be identified. Check the logs for more information. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 🕵️ Unfortunately, we were unable to detect your application. If your application is not located in the root directory of your repository, please make sure you have specified the correct sub-directory where your application is located. Our platform natively supports Node, Ruby, Java, PHP, Python, Go, Scala, and Clojure languages. To see examples of how to deploy your application on Koyeb, please check out our GitHub repositories: https://github.com/koyeb/examples ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1s
+Restore build cache
+Build
+Export docker image
+Logs
+
+Build ready to start ▶️
+>> Cloning github.com/masterkoder2001/mmmm.git commit sha 40f32ef04a35c5bd442220c30ddfee868a8377fe into /builder/workspace
+Initialized empty Git repository in /builder/workspace/.git/
+From https://github.com/masterkoder2001/mmmm
+ * branch            40f32ef04a35c5bd442220c30ddfee868a8377fe -> FETCH_HEAD
+HEAD is now at 40f32ef Add files via upload
+Starting Docker daemon...
+Waiting for the Docker daemon to start...
+done
+Timer: Analyzer started at 2025-02-15T12:36:58Z
+Image with name "registry01.prod.koyeb.com/k-43ee8318-a631-4f48-93d0-1ccc670920f1/07537e7e-fb21-4373-a530-9e64c3404320" not found
+Timer: Analyzer ran for 661.061192ms and ended at 2025-02-15T12:36:59Z
+Timer: Detector started at 2025-02-15T12:37:00Z
+======== Results ========
+fail: heroku/ruby@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/ruby@0.0.0
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: heroku/python@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/python@0.0.0
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: heroku/scala@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/scala@0.0.0
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: heroku/php@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/php@0.0.0
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: heroku/go@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/go@0.0.0
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: koyeb/build-command-nodejs@0.1.0
+pass: heroku/nodejs-engine@3.4.5
+fail: heroku/nodejs-corepack@3.4.5
+fail: heroku/nodejs-pnpm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: koyeb/build-command-nodejs@0.1.0
+pass: heroku/nodejs-engine@3.4.5
+fail: heroku/nodejs-pnpm-engine@3.4.5
+fail: heroku/nodejs-pnpm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: koyeb/build-command-nodejs@0.1.0
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/nodejs-corepack@3.4.5
+fail: heroku/nodejs-yarn@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: koyeb/build-command-nodejs@0.1.0
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/nodejs-corepack@3.4.5
+skip: heroku/nodejs-npm-engine@3.4.5
+fail: heroku/nodejs-npm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: koyeb/build-command-nodejs@0.1.0
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/nodejs-engine@3.4.5
+fail: heroku/nodejs-corepack@3.4.5
+fail: heroku/nodejs-pnpm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/nodejs-engine@3.4.5
+fail: heroku/nodejs-pnpm-engine@3.4.5
+fail: heroku/nodejs-pnpm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/nodejs-corepack@3.4.5
+fail: heroku/nodejs-yarn@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/nodejs-corepack@3.4.5
+skip: heroku/nodejs-npm-engine@3.4.5
+fail: heroku/nodejs-npm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/procfile@4.0.0
+Resolving plan... (try #1)
+fail: heroku/nodejs-engine@3.4.5 provides unused node
+Resolving plan... (try #2)
+fail: heroku/nodejs-engine@3.4.5 provides unused node
+======== Results ========
+pass: heroku/jvm@6.0.4
+fail: heroku/maven@6.0.4
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+pass: heroku/jvm@6.0.4
+fail: heroku/maven@6.0.4
+skip: heroku/procfile@4.0.0
+======== Results ========
+pass: heroku/jvm@6.0.4
+fail: heroku/gradle@6.0.4
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+pass: heroku/jvm@6.0.4
+fail: heroku/gradle@6.0.4
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: heroku/clojure@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/clojure@0.0.0
+skip: heroku/procfile@4.0.0
+Timer: Detector ran for 132.381192ms and ended at 2025-02-15T12:37:01Z
+ERROR: No buildpack groups passed detection.
+ERROR: Please check that you are running against the correct path.
+ERROR: failed to detect: no buildpacks participating

@@ -1,0 +1,72 @@
+Build ready to start ▶️
+>> Cloning github.com/masterkoder2001/startermap.git commit sha 7d4efbb025dd87a6e7448d32186a9b460d86ad1f into /builder/workspace
+Initialized empty Git repository in /builder/workspace/.git/
+From https://github.com/masterkoder2001/startermap
+ * branch            7d4efbb025dd87a6e7448d32186a9b460d86ad1f -> FETCH_HEAD
+HEAD is now at 7d4efbb Add files via upload
+Starting Docker daemon...
+Waiting for the Docker daemon to start...
+done
+Timer: Analyzer started at 2025-02-15T12:28:41Z
+Image with name "registry01.prod.koyeb.com/k-43ee8318-a631-4f48-93d0-1ccc670920f1/1025b224-efe9-4dd3-90d9-18724a43503d" not found
+Timer: Analyzer ran for 271.898356ms and ended at 2025-02-15T12:28:42Z
+Timer: Detector started at 2025-02-15T12:28:42Z
+======== Results ========
+fail: heroku/ruby@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/ruby@0.0.0
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: heroku/python@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/python@0.0.0
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: heroku/scala@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/scala@0.0.0
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: heroku/php@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/php@0.0.0
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: heroku/go@0.0.0
+skip: heroku/procfile@4.0.0
+fail: koyeb/build-command@0.1.0
+======== Results ========
+fail: heroku/go@0.0.0
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: koyeb/build-command-nodejs@0.1.0
+pass: heroku/nodejs-engine@3.4.5
+fail: heroku/nodejs-corepack@3.4.5
+fail: heroku/nodejs-pnpm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: koyeb/build-command-nodejs@0.1.0
+pass: heroku/nodejs-engine@3.4.5
+fail: heroku/nodejs-pnpm-engine@3.4.5
+fail: heroku/nodejs-pnpm-install@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: koyeb/build-command-nodejs@0.1.0
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/nodejs-corepack@3.4.5
+fail: heroku/nodejs-yarn@3.4.5
+skip: heroku/procfile@4.0.0
+======== Results ========
+fail: koyeb/build-command-nodejs@0.1.0
+pass: heroku/nodejs-engine@3.4.5
+skip: heroku/nodejs-corepack@3.4.5
+skip: heroku/nodejs-npm-engine@3.4.5
+fail: heroku/nodejs-npm-install@3.4.5
