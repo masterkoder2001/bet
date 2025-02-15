@@ -81,14 +81,25 @@ client.login(config.DISCORD_TOKEN).then(() => {
     console.error('Detailed connection error:', {
         errorName: error.name,
         errorMessage: error.message,
-        token: config.DISCORD_TOKEN ? `Token length: ${config.DISCORD_TOKEN.length}` : 'No token found',
-        tokenFirstChar: config.DISCORD_TOKEN ? config.DISCORD_TOKEN[0] : 'N/A'
+        tokenLength: config.DISCORD_TOKEN ? config.DISCORD_TOKEN.length : 0,
+        tokenExists: !!config.DISCORD_TOKEN,
+        isDefaultValue: config.DISCORD_TOKEN === 'your-discord-token'
     });
     
-    if (!config.DISCORD_TOKEN || config.DISCORD_TOKEN === 'your-discord-token') {
+    if (!config.DISCORD_TOKEN) {
+        console.error('Error: No Discord token found');
+    } else if (config.DISCORD_TOKEN === 'your-discord-token') {
         console.error('Error: Discord token is using default value from config.js');
-    } else if (!config.DISCORD_TOKEN.startsWith('MTA') && !config.DISCORD_TOKEN.startsWith('MTk')) {
-        console.error('Error: Invalid Discord token format. Token should start with MTA or MTk');
+    } else if (config.DISCORD_TOKEN.length < 50) {
+        console.error('Error: Discord token appears to be invalid (too short)');
     }
-    process.exit(1); // Exit on connection failure
+
+    // Försök starta om en gång innan vi avslutar
+    setTimeout(() => {
+        console.log('Attempting to reconnect...');
+        client.login(config.DISCORD_TOKEN).catch(retryError => {
+            console.error('Reconnection failed:', retryError.message);
+            process.exit(1);
+        });
+    }, 5000);
 });
