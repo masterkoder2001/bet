@@ -13,16 +13,20 @@ def get_finnhub_news():
         end_time = datetime.now()
         start_time = end_time - timedelta(hours=1)
         
-        # Convert to Unix timestamp
+        # Get market news - using only category parameter
+        news = finnhub_client.general_news('general')
+        
+        # Filter news by timestamp manually
         start_timestamp = int(start_time.timestamp())
         end_timestamp = int(end_time.timestamp())
-        
-        # Get market news using the correct method name and parameters
-        news = finnhub_client.general_news('general', from_=start_timestamp, to=end_timestamp)
+        filtered_news = [
+            article for article in news 
+            if start_timestamp <= article['datetime'] <= end_timestamp
+        ]
         
         # Format news for the Discord bot
         formatted_news = []
-        for article in news:
+        for article in filtered_news:
             if article.get('headline') and article.get('summary'):
                 formatted_article = {
                     'title': article['headline'],
