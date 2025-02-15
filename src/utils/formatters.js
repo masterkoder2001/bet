@@ -25,16 +25,13 @@ const formatEvents = (events) => {
 };
 
 const formatNewsMessage = (news) => {
-    return `# 📰 Breaking News
+    return `📰 **Breaking News**
+📢 **${news.title}**
 
-### ${news.title}
+📈 *${news.description}*
 
-${news.description}
-
-> 🔍 **Källa:** ${news.source.name}
-> 🔗 [Läs mer här](${news.url})
-
----`;
+🔍 **Källa:** ${news.source.name}
+🔗 [Läs mer här](${news.url})`;
 };
 
 module.exports = {
