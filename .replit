@@ -1,4 +1,5 @@
 modules = ["nodejs-20", "python-3.11"]
+run = "node index.js"
 
 [nix]
 channel = "stable-24_05"
@@ -30,4 +31,4 @@ task = "shell.exec"
 args = "node src/index.js"
 
 [deployment]
-run = ["sh", "-c", "node src/index.js"]
+run = ["sh", "-c", "node index.js"]
