@@ -5,6 +5,7 @@ const NewsService = require('./services/newsService');
 const MacroService = require('./services/macroService');
 const fs = require('fs');
 const path = require('path');
+require('./health');
 
 logger.info('Starting Discord bot...');
 logger.info('Environment check:', {
@@ -43,10 +44,20 @@ for (const file of commandFiles) {
 let newsService;
 let macroService;
 
-client.once('ready', () => {
-    logger.info(`Bot är online! Inloggad som ${client.user.tag}`);
-    logger.info(`Ansluten till ${client.guilds.cache.size} servrar`);
-    logger.debug('Konfigurerade intents:', client.options.intents);
+client.once('ready', async () => {
+    try {
+        logger.info(`Bot är online! Inloggad som ${client.user.tag}`);
+        logger.info(`Ansluten till ${client.guilds.cache.size} servrar`);
+        logger.debug('Konfigurerade intents:', client.options.intents);
+
+        // Verify bot permissions
+        const guilds = client.guilds.cache;
+        for (const [id, guild] of guilds) {
+            const botMember = guild.members.cache.get(client.user.id);
+            if (!botMember.permissions.has('SendMessages')) {
+                logger.warn(`Saknar nödvändiga behörigheter i guild: ${guild.name}`);
+            }
+        }
 
     try {
         newsService = new NewsService(client);
