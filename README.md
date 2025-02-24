@@ -36,4 +36,4 @@ When deploying to Koyeb, make sure to set up these environment variables | Vid d
 
 For local development | För lokal utveckling:
 ```bash
-node src/index.js
+node src/index.js# 6uuuu
