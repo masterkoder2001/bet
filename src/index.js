@@ -58,8 +58,6 @@ client.once('ready', async () => {
                 logger.warn(`Saknar nödvändiga behörigheter i guild: ${guild.name}`);
             }
         }
-
-    try {
         newsService = new NewsService(client);
         macroService = new MacroService(client);
 
