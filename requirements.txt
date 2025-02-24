@@ -1,4 +1,4 @@
-finnhub-python 2.4.22
+finnhub-python==2.4.22
 twilio
 trafilatura
 finnhub-python==2.4.18
