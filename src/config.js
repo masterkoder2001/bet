@@ -1,7 +1,10 @@
 const validateToken = (token, name = 'Discord') => {
-    if (!token) {
-        console.error(`${name} token saknas i .env filen. Se .env.example för konfiguration.`);
-        process.exit(1);
+    if (!token || token.trim() === '') {
+        throw new Error(`${name} token saknas i .env filen. Se .env.example för konfiguration.`);
+    }
+    
+    if (token.length < 50) {
+        throw new Error(`${name} token verkar vara för kort för att vara giltig`);
     }
     if (token === `your-${name.toLowerCase()}-token-here`) {
         console.error(`${name} token har inte konfigurerats korrekt i .env filen.`);

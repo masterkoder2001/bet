@@ -111,8 +111,30 @@ client.on('error', error => {
     logger.error('Discord-klient fel:', error);
 });
 
-process.on('unhandledRejection', error => {
+// Improved error handling
+process.on('unhandledRejection', (error) => {
     logger.error('Ohanterad promise rejection:', error);
+    // Give time for logs to be written
+    setTimeout(() => process.exit(1), 1000);
+});
+
+process.on('uncaughtException', (error) => {
+    logger.error('Ohanterat fel:', error);
+    // Give time for logs to be written
+    setTimeout(() => process.exit(1), 1000);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    logger.info('SIGTERM signal mottagen. Stänger ner...');
+    client.destroy();
+    process.exit(0);
+});
+
+process.on('SIGINT', () => {
+    logger.info('SIGINT signal mottagen. Stänger ner...');
+    client.destroy();
+    process.exit(0);
 });
 
 // Detailed connection logging
